@@ -14,10 +14,11 @@ subprojects {
 }
 
 subprojects { project ->
-    afterEvaluate {
-        if (project.hasProperty("android")) {
-            project.android.defaultConfig.minSdk = 21
-        }
+    project.plugins.withId("com.android.application") {
+        project.android.defaultConfig.minSdk = 21
+    }
+    project.plugins.withId("com.android.library") {
+        project.android.defaultConfig.minSdk = 21
     }
 }
 
