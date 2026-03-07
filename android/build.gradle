@@ -15,10 +15,10 @@ subprojects {
 
 subprojects { project ->
     project.plugins.withId("com.android.application") {
-        project.android.defaultConfig.minSdk = 21
+        project.android.defaultConfig.minSdkVersion 21
     }
     project.plugins.withId("com.android.library") {
-        project.android.defaultConfig.minSdk = 21
+        project.android.defaultConfig.minSdkVersion 21
     }
 }
 
