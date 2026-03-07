@@ -77,6 +77,12 @@ android {
     }
 }
 
+androidComponents {
+    finalizeDsl { extension ->
+        extension.defaultConfig.minSdk = 21
+    }
+}
+
 flutter {
     source = "../.."
 }
