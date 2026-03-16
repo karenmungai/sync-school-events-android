@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter_android/webview_flutter_android.dart';
 
 const _entryUrl = 'https://syncschoolevents.com/login.html';
 
@@ -36,6 +37,7 @@ class WebShell extends StatefulWidget {
 
 class _WebShellState extends State<WebShell> {
   late final WebViewController _controller;
+  late final WebViewWidget _webViewWidget;
   StreamSubscription<List<ConnectivityResult>>? _connectivitySub;
   bool _isLoading = true;
   bool _isOffline = false;
@@ -66,15 +68,31 @@ class _WebShellState extends State<WebShell> {
         ),
       )
       ..loadRequest(Uri.parse(_entryUrl));
+    _webViewWidget = _buildWebViewWidget();
     _initConnectivity();
+  }
+
+  WebViewWidget _buildWebViewWidget() {
+    var params = PlatformWebViewWidgetCreationParams(
+      controller: _controller.platform,
+    );
+
+    if (WebViewPlatform.instance is AndroidWebViewPlatform) {
+      params = AndroidWebViewWidgetCreationParams
+          .fromPlatformWebViewWidgetCreationParams(
+        params,
+        displayWithHybridComposition: true,
+      );
+    }
+
+    return WebViewWidget.fromPlatformCreationParams(params: params);
   }
 
   Future<void> _initConnectivity() async {
     final results = await Connectivity().checkConnectivity();
     _updateConnectionStatus(results);
-    _connectivitySub = Connectivity()
-        .onConnectivityChanged
-        .listen(_updateConnectionStatus);
+    _connectivitySub =
+        Connectivity().onConnectivityChanged.listen(_updateConnectionStatus);
   }
 
   void _updateConnectionStatus(List<ConnectivityResult> results) {
@@ -115,7 +133,7 @@ class _WebShellState extends State<WebShell> {
       body: SafeArea(
         child: Stack(
           children: [
-            WebViewWidget(controller: _controller),
+            _webViewWidget,
             if (_isLoading && !_isOffline)
               const Center(child: CircularProgressIndicator()),
             if (_isOffline)
