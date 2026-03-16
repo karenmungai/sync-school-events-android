@@ -48,7 +48,7 @@ android {
         applicationId = "com.syncschoolevents.twa"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 24
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
@@ -79,7 +79,7 @@ android {
 
 androidComponents {
     finalizeDsl { extension ->
-        extension.defaultConfig.minSdk = 24
+        extension.defaultConfig.minSdk = 21
     }
 }
 
